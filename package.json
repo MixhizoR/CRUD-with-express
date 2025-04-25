@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch --env-file=.env src/server.js",
+    "dev": "nodemon --legacy-watch src/server.js",
     "test": "jest --detectOpenHandles"
   },
   "keywords": [],
@@ -14,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
-    "mongoose": "^8.13.2"
+    "mongoose": "^8.13.2",
+    "nodemon": "^3.1.10"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",

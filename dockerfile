@@ -2,7 +2,7 @@
 FROM node:22-alpine
 
 # Set the working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE ${BACKEND_INTERNAL_PORT}
 
 # Start the app
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev"]
