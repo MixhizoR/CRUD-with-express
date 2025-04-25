@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   // Helper: API request
   const apiRequest = async (url, options = {}) => {
     const response = await fetch(url, options);
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const posts = await apiRequest("/api/posts");
         displayContainer.innerHTML = posts
-          .map(post => `<p>${post.id} - ${post.title}</p>`)
+          .map(post => `<li>${post._id} - ${post.title}</li>`)
           .join("");
       } catch (error) {
         displayError(displayContainer, error.message);
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       try {
         const post = await apiRequest(`/api/posts/${id}`);
-        displayContainer.innerHTML = `<p>${post.id} - ${post.title}</p>`;
+        displayContainer.innerHTML = `<li>${post._id} - ${post.title}</li>`;
       } catch (error) {
         displayError(displayContainer, error.message);
         console.error(error);
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title }),
         });
-        displayContainer.innerHTML = `<p>${newPost.id} - ${newPost.title}</p>`;
+        displayContainer.innerHTML = `<li>${newPost._id} - ${newPost.title}</li>`;
         titleInput.value = "";
       } catch (error) {
         displayError(displayContainer, error.message);
@@ -102,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title }),
         });
-        displayContainer.innerHTML = `<p>${updatedPost.id} - ${updatedPost.title}</p>`;
+        displayContainer.innerHTML = `<li>${updatedPost._id} - ${updatedPost.title}</li>`;
         idInput.value = "";
         titleInput.value = "";
       } catch (error) {
@@ -128,8 +129,26 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const response = await apiRequest(`/api/posts/${id}`, { method: "DELETE" });
         const { message, post } = response;
-        displayContainer.innerHTML = `<p>${message} - ${post?.id || ""} ${post?.title || ""}</p>`;
+        displayContainer.innerHTML = `<li>${message} - ${post?._id || ""} ${post?.title || ""}</li>`;
         idInput.value = "";
+      } catch (error) {
+        displayError(displayContainer, error.message);
+        console.error(error);
+      }
+    });
+  };
+
+  // DELETE all posts
+  const initializeDeleteAllPosts = () => {
+    const deleteButton = document.getElementById("delete-all-posts-button");
+    const displayContainer = document.getElementById("delete-all-posts-container");
+    if (!deleteButton || !displayContainer) return;
+
+    deleteButton.addEventListener("click", async () => {
+      try {
+        const response = await apiRequest("/api/posts", { method: "DELETE" });
+        const { message } = response;
+        displayContainer.innerHTML = `<li>${message}</li>`;
       } catch (error) {
         displayError(displayContainer, error.message);
         console.error(error);
@@ -143,4 +162,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeCreatePost();
   initializeUpdatePost();
   initializeDeletePost();
+  initializeDeleteAllPosts();
 });

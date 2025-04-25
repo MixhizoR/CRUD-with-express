@@ -1,5 +1,5 @@
 # Use the official Node.js LTS image
-FROM node:22
+FROM node:22-alpine
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your app runs on (change if not 3000)
-EXPOSE 3000
+EXPOSE ${BACKEND_INTERNAL_PORT}
 
 # Start the app
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]

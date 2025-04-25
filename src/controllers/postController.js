@@ -3,12 +3,7 @@ import Post from "../models/Post.js";
 // Get all posts
 export const getAllPosts = async (req, res) => {
     try {
-        const { limit } = req.query;
-        let query = Post.find();
-        if (limit && !isNaN(limit) && limit > 0) {
-            query = query.limit(Number(limit));
-        }
-        const posts = await query.exec();
+        const posts = await Post.find().exec();
         res.status(200).json(posts);
     } catch (err) {
         res.status(500).json({ message: "Server error" });
@@ -63,5 +58,14 @@ export const deletePost = async (req, res) => {
         res.status(200).json({ message: "Post deleted" });
     } catch (err) {
         res.status(400).json({ message: "Invalid ID" });
+    }
+};
+
+export const deleteAllPosts = async (req, res) => {
+    try {
+        await Post.deleteMany();
+        res.status(200).json({ message: "All posts deleted" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
     }
 };
